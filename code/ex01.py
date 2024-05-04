@@ -29,7 +29,7 @@ def upload_file(file_path, new_name=None):
     conn.commit()
 
 def search_file(file_name):
-    c.execute("SELECT * FROM files WHERE original_name = ?", (file_name,))
+    c.execute("SELECT * FROM files WHERE (original_name = ?) or (updated_name = ?)", (file_name, file_name))
     file_data = c.fetchone()
     if file_data:
         return file_data
@@ -37,11 +37,11 @@ def search_file(file_name):
         return None
 
 def update_file(original_name, new_name):
-    c.execute("UPDATE files SET updated_name = ? WHERE original_name = ?", (new_name, original_name))
+    c.execute("UPDATE files SET updated_name = ? WHERE (original_name = ?) or (updated_name = ?)", (new_name, original_name, original_name))
     conn.commit()
 
 def delete_file(file_name):
-    c.execute("DELETE FROM files WHERE original_name = ?", (file_name,))
+    c.execute("DELETE FROM files WHERE (original_name = ?) or (updated_name = ?)", (file_name, file_name))
     conn.commit()
 
 if __name__ == "__main__":
@@ -72,7 +72,7 @@ if __name__ == "__main__":
                 print("File not found.")
 
         elif choice == '3':
-            original_name = input("Enter original file name: ")
+            original_name = input("Enter file name: ")
             new_name = input("Enter new name: ")
             update_file(original_name, new_name)
             print("File name updated successfully.")
