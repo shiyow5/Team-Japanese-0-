@@ -3,16 +3,16 @@
 データベースはsqlite3を使用する  
 database Name : text_datas.db  
 
-### ディレクトリ構造  
-Team_Japanese_0
-      |
-      |---code
-      |     |--ex01.py
-      |
-      |---datase
-      |     |--text_datas.db
-      |
-      |---input_files
+### ディレクトリ構造    
+Team_Japanese_0  
+      |  
+      |---code  
+      |     |--ex01.py  
+      |  
+      |---datase  
+      |     |--text_datas.db  
+      |  
+      |---input_files  
 
 ### 前提  
   import os  
@@ -23,7 +23,7 @@ Team_Japanese_0
 - Create files (e.g. upload TXT file)  
   内容：txtファイルの内容をdatabaseに登録  
   担当：s1300221  
-  def create_file(connectオブジェクト, file_path)  
+  def create_file(connectオブジェクト, file_name, new_name)  
   return True of False
   
 - Retrieve files (e.g. search for uploaded file)  
