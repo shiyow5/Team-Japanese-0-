@@ -12,7 +12,7 @@ database Name : text_datas.db
   内容：txtファイルの内容をdatabaseに登録  
   担当：s1300221  
   def create_file(file_path, store_path)  
-  return None  
+  return True of False
   
 - Retrieve files (e.g. search for uploaded file)  
   内容：database内のファイルを検索  
@@ -30,4 +30,4 @@ database Name : text_datas.db
   内容：database内のファイルデータの削除  
   担当：s1300097  
   def delete_file(connectオブジェクト, file_name)  
-  return None  
+  return True or False
