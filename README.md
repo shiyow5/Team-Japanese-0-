@@ -24,7 +24,7 @@ Team_Japanese_0
   内容：txtファイルの内容をdatabaseに登録  
   担当：s1300221  
   def create_file(connectオブジェクト, file_name, new_name)  
-  return True of False
+  return None  
   
 - Retrieve files (e.g. search for uploaded file)  
   内容：database内のファイルを検索  
@@ -36,10 +36,10 @@ Team_Japanese_0
   内容：database内の特定のファイル名を更新  
   担当：s1300023  
   def update_file(connectオブジェクト, file_name, new_name)  
-  return True or False  
+  return None  
   
 - Delete files  
   内容：database内のファイルデータの削除  
   担当：s1300097  
   def delete_file(connectオブジェクト, file_name)  
-  return True or False
+  return None
