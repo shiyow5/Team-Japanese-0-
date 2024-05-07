@@ -16,6 +16,7 @@ Team_Japanese_0
 　　　|  
 　　　|---input_files  
 　　　　　　　|--Q1.txt, etc...  
+現在、datasetやinput_filesなどの具体的なデータが入るディレクトリには適当に作成されたテストファイルが一時的に格納されています  
 
 ### 前提  
   import os  
