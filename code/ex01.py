@@ -1,6 +1,6 @@
 import sqlite3
 
-def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->bool:
+def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
     cur = conn.cursor()
     
     cur.execute(
