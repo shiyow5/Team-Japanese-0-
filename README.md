@@ -11,7 +11,7 @@ Team_Japanese_0
 　　　|---code  
 　　　|　　　|--ex01.py  
 　　　|  
-　　　|---datase  
+　　　|---dataset  
 　　　|　　　|--text_datas.db  
 　　　|  
 　　　|---input_files  
