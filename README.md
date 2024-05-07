@@ -5,14 +5,14 @@ database Name : text_datas.db
 
 ### ディレクトリ構造    
 Team_Japanese_0  
-      |  
-      |---code  
-      |     |--ex01.py  
-      |  
-      |---datase  
-      |     |--text_datas.db  
-      |  
-      |---input_files  
+　　　|  
+　　　|---code  
+　　　|　　　|--ex01.py  
+　　　|  
+　　　|---datase  
+　　　|　　　|--text_datas.db  
+　　　|  
+　　　|---input_files  
 
 ### 前提  
   import os  
