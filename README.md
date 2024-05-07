@@ -1,33 +1,33 @@
 # Team Japanese [0]
 ## Ex1
-データベースはsqlite3を使用する
-database Name : text_datas.db
+データベースはsqlite3を使用する  
+database Name : text_datas.db  
 
-前提:
-  import os
-  import sqlite3
-  conn = sqlite3.connect('text_datas.db')
+前提:  
+  import os  
+  import sqlite3  
+  conn = sqlite3.connect('text_datas.db')  
 
-- Create files (e.g. upload TXT file)
-  内容：txtファイルの内容をdatabaseに登録
-  担当：s1300221
-  def create_file(file_path, store_path)
-  return None
+- Create files (e.g. upload TXT file)  
+  内容：txtファイルの内容をdatabaseに登録  
+  担当：s1300221  
+  def create_file(file_path, store_path)  
+  return None  
   
-- Retrieve files (e.g. search for uploaded file)
-  内容：database内のファイルを検索
-  担当：s1280126
-  def retrieve_file(connectオブジェクト, file_name)
-  return file_data or None
+- Retrieve files (e.g. search for uploaded file)  
+  内容：database内のファイルを検索  
+  担当：s1280126  
+  def retrieve_file(connectオブジェクト, file_name)  
+  return file_data or None  
   
-- Update files (e.g. rename file in experiment)
-  内容：database内の特定のファイル名を更新
-  担当：s1300023
-  def update_file(connectオブジェクト, file_name, new_name)
-  return True or False
+- Update files (e.g. rename file in experiment)  
+  内容：database内の特定のファイル名を更新  
+  担当：s1300023  
+  def update_file(connectオブジェクト, file_name, new_name)  
+  return True or False  
   
-- Delete files
-  内容：database内のファイルデータの削除
-  担当：s1300097
-  def delete_file(connectオブジェクト, file_name)
-  return None
+- Delete files  
+  内容：database内のファイルデータの削除  
+  担当：s1300097  
+  def delete_file(connectオブジェクト, file_name)  
+  return None  
