@@ -31,8 +31,10 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
 
 def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
     cur = conn.cursor()
-    c.execute("UPDATE files SET new_name = ? WHERE (file_name = ?) or (new_name = ?)", (new_name, original_name, original_name))
+    cur.execute("UPDATE files SET new_name = ? WHERE (file_name = ?)", (new_name, original_name))
     conn.commit()
+    cur.close()
+    return
 
 def main():
     database_path = __file__.replace('code/ex01.py', 'dataset/text_datas.db')
