@@ -29,8 +29,14 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
 
-def delete_file(connectオブジェクト, file_name):
-  return None
+def delete_file(conn, file_name):
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
+    )
+    conn.commit()
+    cur.close()
+    return
 
 def main():
     database_path = __file__.replace('code/ex01.py', 'dataset/text_datas.db')
