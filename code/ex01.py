@@ -29,9 +29,10 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
 
+
 def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
     cur = conn.cursor()
-    cur.execute("UPDATE files SET new_name = ? WHERE (file_name = ?)", (new_name, original_name))
+    cur.execute("UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", (new_name, file_name, file_name))
     conn.commit()
     cur.close()
     return
@@ -43,6 +44,8 @@ def main():
     
     #create_file()テスト用
     #create_file(conn, 'Author_1', 'K1')
+    #update_file()テスト用
+    #update_file(conn, 'K1', 'Q1')
     
     conn.close()
     return
