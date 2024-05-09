@@ -29,10 +29,20 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
 
-
 def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
     cur = conn.cursor()
-    cur.execute("UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", (new_name, file_name, file_name))
+    cur.execute(
+      "UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", [new_name, file_name, file_name]
+    )
+    conn.commit()
+    cur.close()
+    return
+  
+def delete_file(conn:sqlite3.Connection=None, file_name:str='text')->None:
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
+    )
     conn.commit()
     cur.close()
     return
