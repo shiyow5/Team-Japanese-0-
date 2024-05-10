@@ -43,11 +43,11 @@ Team_Japanese_0
   担当：s1300023  
   def update_file(connectオブジェクト, file_name, new_name)  
   return None  
-  進捗：作業途中
+  進捗：マージ済み
   
 - Delete files  
   内容：database内のファイルデータの削除  
   担当：s1300097  
   def delete_file(connectオブジェクト, file_name)  
   return None  
-  進捗：作業途中
+  進捗：マージ済み
