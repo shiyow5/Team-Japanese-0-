@@ -29,6 +29,21 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
 
+def retrieve_file(conn:sqlite3.Connection=None, file_name:str='Q1')->None:
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM files WHERE original_name = ?", [file_name,])
+    
+    file_data = cur.fetchone()
+    cur.close()
+    
+    if file_data:
+        return file_data
+    else:
+        print(f"ファイル '{file_name}' が見つかりませんでした。")
+        return None
+
+
 def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
     cur = conn.cursor()
     cur.execute(
