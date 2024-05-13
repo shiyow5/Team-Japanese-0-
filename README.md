@@ -1,7 +1,7 @@
 # Team Japanese [0]  
 ※mainブランチでは作業しないようにしましょう  
 タスクが完了したらプルリクエストをしてください。s1300221がレビューの後にマージします。  
-## Ex1
+## Level-1
 データベースはsqlite3を使用する  
 database Name : text_datas.db  
 
@@ -19,10 +19,11 @@ Team_Japanese_0
 現在、datasetやinput_filesなどの具体的なデータが入るディレクトリには適当に作成されたテストファイルが一時的に格納されています  
 
 ### 前提  
-  import os  
-  import sqlite3  
-  conn = sqlite3.connect('text_datas.db')  
-
+```python
+import os  
+import sqlite3  
+conn = sqlite3.connect('text_datas.db')  
+```
 ### タスク割り当て  
 - Create files (e.g. upload TXT file)  
   内容：txtファイルの内容をdatabaseに登録  
@@ -51,3 +52,50 @@ Team_Japanese_0
   def delete_file(connectオブジェクト, file_name)  
   return None  
   進捗：マージ済み
+
+## Level1-2
+### ディレクトリ構造    
+Team_Japanese_0  
+　　　|  
+　　　|---code  
+　　　|　　　|--ex01.py  
+　　　|　　　|--ex02.py  
+　　　|  
+　　　|---dataset  
+　　　|　　　|--text_datas.db  
+　　　|  
+　　　|---input_files  
+　　　　　　　|--Q1.txt, etc...  
+
+### 前提  
+### タスク割り当て  
+
+## Level2-1
+### ディレクトリ構造    
+Team_Japanese_0  
+　　　|  
+　　　|---code  
+　　　|　　　|--ex01.py  
+　　　|　　　|--ex02.py  
+　　　|　　　|--ex03.py
+　　　|  
+　　　|---dataset  
+　　　|　　　|--text_datas.db  
+　　　|  
+　　　|---input_files  
+　　　　　　　|--Q1.txt, etc...  
+
+### 前提  
+'''python
+file = open(file_path)
+text = read(file)
+'''
+### タスク割り当て 
+- frequency(text, top_n)  
+  return word_list  
+  
+- compare(word_list1, word_list2)
+  return match_rate  
+  担当：s1300023  
+- similary(Q_text, K_text_list)
+  担当：s1280126  
