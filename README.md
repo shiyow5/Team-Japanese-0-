@@ -77,7 +77,7 @@ Team_Japanese_0
 　　　|---code  
 　　　|　　　|--ex01.py  
 　　　|　　　|--ex02.py  
-　　　|　　　|--ex03.py
+　　　|　　　|--ex03.py  
 　　　|  
 　　　|---dataset  
 　　　|　　　|--text_datas.db  
@@ -86,16 +86,21 @@ Team_Japanese_0
 　　　　　　　|--Q1.txt, etc...  
 
 ### 前提  
-'''python
+```python
 file = open(file_path)
 text = read(file)
-'''
+```
 ### タスク割り当て 
-- frequency(text, top_n)  
+- text内の単語の出現頻度に対して上位n単語を返す。
+  frequency(text, top_n)  
   return word_list  
   
-- compare(word_list1, word_list2)
+- 単語のリストword_list1とword_list2内の単語を比べword_list1に対するword_list2の類似率を返す。
+  compare(word_list1, word_list2)
   return match_rate  
-  担当：s1300023  
-- similary(Q_text, K_text_list)
+  担当：s1300023
+  
+- ファイル名Q_fileとファイル名のリストK_filesを受け取り、Q_fileに対して一番類似率の高いK_fileを返す。また類似率の差が５％以下の別のK_fileが存在する場合、上位+20単語に拡張し、類似率を再計算する。
+  similary(Q_file, K_files)
+  return highSim_K_file  
   担当：s1280126  
