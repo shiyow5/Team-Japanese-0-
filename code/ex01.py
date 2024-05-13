@@ -72,6 +72,8 @@ def main():
     #create_file(conn, 'Author_1', 'K1')
     #update_file()テスト用
     #update_file(conn, 'K1', 'Q1')
+    #delete_file()テスト用
+    #delete_file(conn, 'Q1')
     
     conn.close()
     return
