@@ -29,12 +29,13 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
 
-def retrieve_file(conn:sqlite3.Connection=None, file_name:str='Q1')->None:
+
+def retrieve_file(conn:sqlite3.Connection=None, file_name:str='Q1')->dict:
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM files WHERE original_name = ?", [file_name,])
+    cur.execute("SELECT * FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name])
     
-    file_data = cur.fetchone()
+    file_data = cur.fetchall()
     cur.close()
     
     if file_data:
