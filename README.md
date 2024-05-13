@@ -36,7 +36,7 @@ Team_Japanese_0
   担当：s1280126  
   def retrieve_file(connectオブジェクト, file_name)  
   return file_data or None  
-  進捗：作業途中
+  進捗：マージ済み
   
 - Update files (e.g. rename file in experiment)  
   内容：database内の特定のファイル名を更新  
