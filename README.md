@@ -69,6 +69,7 @@ Team_Japanese_0
 
 ### 前提  
 ### タスク割り当て  
+担当：s1300221  
 
 ## Level2-1
 ### ディレクトリ構造    
@@ -90,17 +91,20 @@ Team_Japanese_0
 file = open(file_path)
 text = read(file)
 ```
+類似率について：　word_list1に対するword_list2の類似率の場合  
+類似率　＝　単語一致数　/　word_list1の単語数  
+
 ### タスク割り当て 
 - text内の単語の出現頻度に対して上位n単語を返す。  
-  frequency(text, top_n)  
+  def frequency(text, top_n)  
   return word_list  
   
 - 単語のリストword_list1とword_list2内の単語を比べword_list1に対するword_list2の類似率を返す。  
-  compare(word_list1, word_list2)  
+  def compare(word_list1, word_list2)  
   return match_rate  
   担当：s1300023  
   
 - ファイル名Q_fileとファイル名のリストK_filesを受け取り、Q_fileに対して一番類似率の高いK_fileを返す。また類似率の差が５％以下の別のK_fileが存在する場合、上位+20単語に拡張し、類似率を再計算する。  
-  similary(Q_file, K_files)  
+  def similary(Q_file, K_files)  
   return highSim_K_file  
   担当：s1280126  
