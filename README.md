@@ -9,7 +9,7 @@ database Name : text_datas.db
 Team_Japanese_0  
 　　　|  
 　　　|---code  
-　　　|　　　|--ex01.py  
+　　　|　　　|--File.py  
 　　　|  
 　　　|---dataset  
 　　　|　　　|--text_datas.db  
@@ -58,8 +58,8 @@ conn = sqlite3.connect('text_datas.db')
 Team_Japanese_0  
 　　　|  
 　　　|---code  
-　　　|　　　|--ex01.py  
-　　　|　　　|--ex02.py  
+　　　|　　　|--File.py  
+　　　|　　　|--GUI.py  
 　　　|  
 　　　|---dataset  
 　　　|　　　|--text_datas.db  
@@ -76,8 +76,8 @@ Team_Japanese_0
 Team_Japanese_0  
 　　　|  
 　　　|---code  
-　　　|　　　|--ex01.py  
-　　　|　　　|--ex02.py  
+　　　|　　　|--File.py  
+　　　|　　　|--GUI.py  
 　　　|　　　|--ex03.py  
 　　　|  
 　　　|---dataset  
