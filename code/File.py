@@ -63,8 +63,57 @@ def delete_file(conn:sqlite3.Connection=None, file_name:str='text')->None:
     cur.close()
     return
 
+def left_right_n_word(sentence:str='', index:int=0, n:int=0)->tuple:
+    pre_idx = index
+    post_idx = index
+    count = 0
+    
+    for i in range(index, -1, -1):
+        if (sentence[i] == ' '):
+            count += 1
+        if (count == n+1 or i == 0):
+            pre_idx = i+1
+            break
+        
+    count = 0
+    for i in range(index, len(sentence)):
+        if (sentence[i] == ' '):
+            count += 1
+        if (count == n+1 or i == len(sentence)-1):
+            post_idx = i
+            break
+        
+    for i in range(index, len(sentence)):
+        if (sentence[i] == ' '):
+            word_len = i - index
+            break
+        
+    return (sentence[pre_idx:index], sentence[index+word_len:post_idx])
+
+def search_word(conn:sqlite3.Connection=None, files:list=[], word:str='')->list:
+    cur = conn.cursor()
+
+    sentences = []
+    for file in files:
+        cur.execute(
+            "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file, file]
+        )
+        
+        sentences.append(cur.fetchone())
+    
+    result = []
+    for sentence in sentences:
+        sentence = " " + sentence[0] + " "
+        indexs = [i+1 for i in range(len(sentence)) if sentence.startswith(f" {word} ", i)]
+        
+        for index in indexs:
+            result.append(left_right_n_word(sentence, index, 5))
+    
+    cur.close()
+    return result
+
 def main():
-    database_path = __file__.replace('code/ex01.py', 'dataset/text_datas.db')
+    database_path = __file__.replace('code/File.py', 'dataset/text_datas.db')
     
     conn = sqlite3.connect(database_path)
     
@@ -74,6 +123,8 @@ def main():
     #update_file(conn, 'K1', 'Q1')
     #delete_file()テスト用
     #delete_file(conn, 'Q1')
+    #search_word()テスト用
+    #print(search_word(conn, ['K1'], 'give'))
     
     conn.close()
     return
