@@ -91,6 +91,8 @@ def left_right_n_word(sentence:str='', index:int=0, n:int=0)->tuple:
     return (sentence[pre_idx:index], sentence[index+word_len:post_idx])
 
 def search_word(conn:sqlite3.Connection=None, files:list=[], word:str='')->list:
+    extraction_range = 5
+    
     cur = conn.cursor()
 
     sentences = []
@@ -107,7 +109,7 @@ def search_word(conn:sqlite3.Connection=None, files:list=[], word:str='')->list:
         indexs = [i+1 for i in range(len(sentence)) if sentence.startswith(f" {word} ", i)]
         
         for index in indexs:
-            result.append(left_right_n_word(sentence, index, 5))
+            result.append(left_right_n_word(sentence, index, extraction_range))
     
     cur.close()
     return result
