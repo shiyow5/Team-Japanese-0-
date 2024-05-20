@@ -63,7 +63,31 @@ def delete_file(conn:sqlite3.Connection=None, file_name:str='text')->None:
     cur.close()
     return
 
-def left_right_n_word(sentence:str='', index:int=0, n:int=0)->tuple:
+def format(sentence:str="")->str:
+    '''
+    Format sentences to insert space between word tokens
+    '''
+    
+    sentence = ' ' + sentence.strip() + ' '
+    i = 0
+    while True:
+        if (i == len(sentence)):
+            break
+    #for i in range(len(sentence)):
+        if ((not sentence[i].isalpha()) and (sentence[i] != ' ')):
+            if (sentence[i-1] == ' ' and sentence[i+1] != ' '):
+                sentence = sentence[:i+1] + ' ' + sentence[i+1:]
+            elif (sentence[i-1] != ' ' and sentence[i+1] == ' '):
+                sentence = sentence[:i] + ' ' + sentence[i:]
+            elif (sentence[i-1] != ' ' and sentence[i+1] != ' '):
+                sentence = sentence[:i] + ' ' + sentence[i] + ' ' + sentence[i+1:]
+            #print(sentence)
+            
+        i += 1
+            
+    return sentence
+
+def left_right_n_word(sentence:str="", index:int=0, n:int=0)->tuple:
     pre_idx = index
     post_idx = index
     count = 0
