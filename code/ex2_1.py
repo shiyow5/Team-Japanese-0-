@@ -14,6 +14,19 @@ def frequency(text:str = 'text', top_n:int = 0)->list:
 
     return list[:top_n]
 
+def compare(list1,list2):
+
+    x=0
+
+    for i in range(list1):
+        for j in range(list2):
+            if list1[i]==list2[j]:
+                x+=1
+    
+    y=x/len(list1)
+
+    return y
+
 if __name__ == "__main__":
     text = "I'm a perfect human.\ntanaka tanaka tanaka!"
     print(f"\n{text}\n")

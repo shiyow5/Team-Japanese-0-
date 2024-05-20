@@ -97,7 +97,8 @@ text = read(file)
 ### タスク割り当て 
 - text内の単語の出現頻度に対して上位n単語を返す。  
   def frequency(text, top_n)  
-  return word_list  
+  return word_list
+  担当：s1300097
   
 - 単語のリストword_list1とword_list2内の単語を比べword_list1に対するword_list2の類似率を返す。  
   def compare(word_list1, word_list2)  
