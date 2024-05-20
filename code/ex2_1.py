@@ -19,7 +19,7 @@ def frequency(text:str = 'text', top_n:int = 0)->list:
 
 if __name__ == "__main__":
     text = "I'm a perfect human.\ntanaka tanaka tanaka!"
-    print(text + "\n")
+    print(f"\n{text}\n")
 
     word_list = frequency(text, 20)
     print(word_list)
