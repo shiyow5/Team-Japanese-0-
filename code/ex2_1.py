@@ -21,7 +21,7 @@ if __name__ == "__main__":
     text = "I'm a perfect human.\ntanaka tanaka tanaka!"
     print(f"\n{text}\n")
 
-    word_list = frequency(text, 20)
-    print(word_list)
     word_list = frequency(text, 3)
+    print(word_list)
+    word_list = frequency(text, 20)
     print(word_list)
