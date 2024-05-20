@@ -1,12 +1,9 @@
+import File
 def frequency(text:str = 'text', top_n:int = 0)->list:
-    text = text.split()
+    text = File.format(text)
     dict = {}
-    non_wordtoken = ",.;:!?"
 
     for s in text:
-        if s[-1] in non_wordtoken:
-            s = s[:-1]
-
         if s in dict:
             dict[s] += 1
         else:
