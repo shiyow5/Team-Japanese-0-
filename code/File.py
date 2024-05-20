@@ -88,6 +88,9 @@ def format(sentence:str="")->str:
     return sentence
 
 def left_right_n_word(sentence:str="", index:int=0, n:int=0)->tuple:
+    '''
+    改良の余地あり（特にsplit()を使うことでコード量節約可能）
+    '''
     pre_idx = index
     post_idx = index
     count = 0

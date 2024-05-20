@@ -1,6 +1,6 @@
 import File
 def frequency(text:str = 'text', top_n:int = 0)->list:
-    text = File.format(text)
+    text = File.format(text).split()
     dict = {}
 
     for s in text:
@@ -18,20 +18,24 @@ def compare(list1,list2):
 
     x=0
 
-    for i in range(list1):
-        for j in range(list2):
-            if list1[i]==list2[j]:
-                x+=1
+    for word in list1:
+        if word in list2:
+            x+=1
     
     y=x/len(list1)
 
     return y
 
 if __name__ == "__main__":
-    text = "I'm a perfect human.\ntanaka tanaka tanaka!"
-    print(f"\n{text}\n")
+    text1 = "I'm a 'perfect human'.\ntanaka tanaka tanaka!!"
+    text2 = "tanaka is very pop human. But, he like kill."
+    print(f"\n{text1}")
+    print(f"{text2}\n")
 
-    word_list = frequency(text, 3)
-    print(word_list)
-    word_list = frequency(text, 20)
-    print(word_list)
+    word_list1 = frequency(text1, 3)
+    print(word_list1)
+    word_list1 = frequency(text1, 20)
+    print(word_list1)
+    word_list2 = frequency(text2, 20)
+    print(word_list2)
+    print(compare(word_list1, word_list2))
