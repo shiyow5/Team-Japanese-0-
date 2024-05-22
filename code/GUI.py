@@ -17,7 +17,7 @@ label4s = []
 
 def search():
     word = text_1.get()
-    results = File.search_word(conn, ['K1'], word)
+    results = File.search_word(conn, word, ['K1'])
     
     global text2s, label2s, text3s, label3s, text4s, label4s
     text2s = []
