@@ -73,7 +73,7 @@ def format(sentence:str="")->str:
     while True:
         if (i == len(sentence)):
             break
-    #for i in range(len(sentence)):
+        
         if ((not sentence[i].isalpha()) and (sentence[i] != ' ')):
             if (sentence[i-1] == ' ' and sentence[i+1] != ' '):
                 sentence = sentence[:i+1] + ' ' + sentence[i+1:]
@@ -81,43 +81,18 @@ def format(sentence:str="")->str:
                 sentence = sentence[:i] + ' ' + sentence[i:]
             elif (sentence[i-1] != ' ' and sentence[i+1] != ' '):
                 sentence = sentence[:i] + ' ' + sentence[i] + ' ' + sentence[i+1:]
-            #print(sentence)
             
         i += 1
             
     return sentence
 
 def left_right_n_word(sentence:str="", index:int=0, n:int=0)->tuple:
-    '''
-    改良の余地あり（特にsplit()を使うことでコード量節約可能）
-    '''
-    pre_idx = index
-    post_idx = index
-    count = 0
+    left_n = ' '.join(sentence[index-n:index])
+    right_n = ' '.join(sentence[index+1:index+n+1])
     
-    for i in range(index, -1, -1):
-        if (sentence[i] == ' '):
-            count += 1
-        if (count == n+1 or i == 0):
-            pre_idx = i+1
-            break
-        
-    count = 0
-    for i in range(index, len(sentence)):
-        if (sentence[i] == ' '):
-            count += 1
-        if (count == n+1 or i == len(sentence)-1):
-            post_idx = i
-            break
-        
-    for i in range(index, len(sentence)):
-        if (sentence[i] == ' '):
-            word_len = i - index
-            break
-        
-    return (sentence[pre_idx:index], sentence[index+word_len:post_idx])
+    return (left_n, right_n)
 
-def search_word(conn:sqlite3.Connection=None, files:list=[], word:str='')->list:
+def search_word(conn:sqlite3.Connection=None, word:str='', files:list=[], type:str='word-token')->list:
     extraction_range = 5
     
     cur = conn.cursor()
@@ -131,9 +106,10 @@ def search_word(conn:sqlite3.Connection=None, files:list=[], word:str='')->list:
         sentences.append(cur.fetchone())
     
     result = []
+    
     for sentence in sentences:
-        sentence = " " + sentence[0] + " "
-        indexs = [i+1 for i in range(len(sentence)) if sentence.startswith(f" {word} ", i)]
+        sentence = format(sentence[0]).split()
+        indexs = [i for i in range(len(sentence)) if sentence[i]==word]
         
         for index in indexs:
             result.append(left_right_n_word(sentence, index, extraction_range))
