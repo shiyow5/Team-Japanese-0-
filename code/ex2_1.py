@@ -1,18 +1,18 @@
 import File
 def frequency(text:str = 'text', top_n:int = 0)->list:
     text = File.format(text).split()
-    dict = {}
+    word_dict = {}
 
     for s in text:
-        if s in dict:
-            dict[s] += 1
+        if s in word_dict:
+            word_dict[s] += 1
         else:
-            dict.setdefault(s, 1)
+            word_dict.setdefault(s, 1)
 
-    list = sorted(dict.items(), key = lambda x : x[1], reverse=True)
-    list = [i for i, j in list]
+    word_list = sorted(word_dict.items(), key = lambda x : x[1], reverse=True)
+    word_list = [i for i, j in word_list]
 
-    return list[:top_n]
+    return word_list[:top_n]
 
 def compare(list1,list2):
 
