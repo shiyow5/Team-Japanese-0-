@@ -1,18 +1,18 @@
 import File
 def frequency(text:str = 'text', top_n:int = 0)->list:
     text = File.format(text).split()
-    dict = {}
+    word_dict = {}
 
     for s in text:
-        if s in dict:
-            dict[s] += 1
+        if s in word_dict:
+            word_dict[s] += 1
         else:
-            dict.setdefault(s, 1)
+            word_dict.setdefault(s, 1)
 
-    list = sorted(dict.items(), key = lambda x : x[1], reverse=True)
-    list = [i for i, j in list]
+    word_list = sorted(word_dict.items(), key = lambda x : x[1], reverse=True)
+    word_list = [i for i, j in word_list]
 
-    return list[:top_n]
+    return word_list[:top_n]
 
 def compare(list1,list2):
 
@@ -26,49 +26,47 @@ def compare(list1,list2):
 
     return y
 
-def readfile(file_path: str) -> str:
-    with open(file_path, 'r') as file:
-        return file.read()
-        
 def similary(Q_file, K_files):
-    Q_text = read_file(Q_file)
-    Q_top_words = frequency(Q_text, 20)
-
-    max_similarity = 0
-    best_match = ''
     
+    Q_text = read(Q_file)
+    Q_topwords = frequency(Q_text, 20)
+
+    max_sim = 0
+    best_match = ''
+     
     similarities = []
     
     for K_file in K_files:
-        K_text = read_file(K_file)
-        K_top_words = frequency(K_text, 20)
+        K_text = read(K_files)
+        K_topwords = frequency(K_text, 20)
         
-        similarity = compare(Q_top_words, K_top_words)
+        similarity = compare(Q_topwords, K_topwords)
         similarities.append((K_file, similarity))
         
-        if similarity > max_similarity:
-            max_similarity = similarity
+        if similarity > max_sim:
+            max_sim = similarity
             best_match = K_file
 
     for K_file, similarity in similarities:
-        if K_file != best_match and abs(max_similarity - similarity) <= 0.05:
-            
+        
+        if K_file != best_match and abs(max_sim - similarity) <= 0.05:
             K_top_words = frequency(read_file(K_file), 40)
-            extended_similarity = compare(Q_top_words, K_top_words)
+            extended_sim = compare(Q_topwords, K_topwords)
             
-            if extended_similarity > max_similarity:
-                max_similarity = extended_similarity
+            if extended_sim > max_sim:
+                max_sim = extended_sim
                 best_match = K_file
 
     return best_match
 
 if __name__ == "__main__":
-    Q_file = 'path/to/Q_file.txt'
-    K_files = ['path/to/K1_file.txt', 'path/to/K2_file.txt', 'path/to/K3_file.txt']
-
+    
+    Q_file = open(Q_file_path)
+    K_files = open(K_file_path)
+    
     highSim_K_file = similary(Q_file, K_files)
     print(f"The most similar file is: {highSim_K_file}")
-
+    
     text1 = "I'm a 'perfect human'.\ntanaka tanaka tanaka!!"
     text2 = "tanaka is very pop human. But, he like kill."
     print(f"\n{text1}")
