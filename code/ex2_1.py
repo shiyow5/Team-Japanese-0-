@@ -27,6 +27,7 @@ def compare(list1,list2):
     return y
 
 def similary(Q_file, K_files):
+    """40までしか拡張しないので後で修正"""
     
     Q_text = read(Q_file)
     Q_topwords = frequency(Q_text, 20)
@@ -50,8 +51,8 @@ def similary(Q_file, K_files):
     for K_file, similarity in similarities:
         
         if K_file != best_match and abs(max_sim - similarity) <= 0.05:
-            K_top_words = frequency(read_file(K_file), 40)
-            extended_sim = compare(Q_topwords, K_topwords)
+            K_top_words = frequency(read(K_file), 40)
+            extended_sim = compare(Q_topwords, K_top_words)
             
             if extended_sim > max_sim:
                 max_sim = extended_sim
