@@ -1,4 +1,6 @@
+import sqlite3
 import File
+
 def frequency(text:str = 'text', top_n:int = 0)->list:
     text = File.format(text).split()
     word_dict = {}
@@ -26,48 +28,57 @@ def compare(list1,list2):
 
     return y
 
-def similary(Q_file, K_files):
-    """40までしか拡張しないので後で修正"""
+def similary(conn:sqlite3.Connection=None, Q_file:str='', K_files:list=[], Recursive_arg:int=20)->str:
     
-    Q_text = read(Q_file)
-    Q_topwords = frequency(Q_text, 20)
-
-    max_sim = 0
-    best_match = ''
-     
-    similarities = []
+    cur = conn.cursor()
+    
+    cur.execute(
+        "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [Q_file, Q_file]
+    )
+    Q_text = cur.fetchone()[0]
+    
+    sim_list = []
     
     for K_file in K_files:
-        K_text = read(K_files)
-        K_topwords = frequency(K_text, 20)
+        cur.execute(
+            "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [K_file, K_file]
+        )
+        K_text = cur.fetchone()[0]
         
-        similarity = compare(Q_topwords, K_topwords)
-        similarities.append((K_file, similarity))
+        score = compare(frequency(Q_text, Recursive_arg), frequency(K_text, Recursive_arg))
+        sim_list.append((K_file, score))
         
-        if similarity > max_sim:
-            max_sim = similarity
-            best_match = K_file
-
-    for K_file, similarity in similarities:
+    cur.close()
         
-        if K_file != best_match and abs(max_sim - similarity) <= 0.05:
-            K_top_words = frequency(read(K_file), 40)
-            extended_sim = compare(Q_topwords, K_top_words)
+    sim_list = sorted(sim_list, key = lambda x:x[1], reverse=True)
+    print(f'top{Recursive_arg}:\n{sim_list}')
+    
+    next_K_files = []
+    for sim_data in sim_list:
+        if (sim_data == sim_list[0]):
+            high_score = sim_data[1]
+        if ((high_score - sim_data[1]) <= 0.05):#類似度の高い上位のファイル同士のスコアの差が5%以下なら残す
+            next_K_files.append(sim_data[0])
             
-            if extended_sim > max_sim:
-                max_sim = extended_sim
-                best_match = K_file
+    if (len(next_K_files) >= 2 and len(File.format(Q_text).split()) >= Recursive_arg):
+        return similary(conn, Q_file, next_K_files, Recursive_arg+20)
+    
+    highSim_K_file = sim_list[0]
+    
+    return highSim_K_file
 
-    return best_match
 
 if __name__ == "__main__":
+    database_path = __file__.replace('code/ex2_1.py', 'DataBase/text_datas.db')
+    conn = sqlite3.connect(database_path)
     
-    Q_file = open(Q_file_path)
-    K_files = open(K_file_path)
+    K_files = ['AnwarKhoirul_20', 'AokiToshiaki_4', 'AsanoFumihiko_1', 'ChenJiageng_6', 'CheongKaiYuen_1', 'DangJiannwu_5', 'DefagoXavier_1', 'IkedaKokolo_2', 'InoguchiYasushi_1', 'MatsumotoTadashi_19']
     
-    highSim_K_file = similary(Q_file, K_files)
+    print('progress~')
+    highSim_K_file = similary(conn, 'WirelessComm_unknown', K_files)
+    print('~finish')
     print(f"The most similar file is: {highSim_K_file}")
-    
+    '''
     text1 = "I'm a 'perfect human'.\ntanaka tanaka tanaka!!"
     text2 = "tanaka is very pop human. But, he like kill."
     print(f"\n{text1}")
@@ -80,3 +91,4 @@ if __name__ == "__main__":
     word_list2 = frequency(text2, 20)
     print(word_list2)
     print(compare(word_list1, word_list2))
+    '''
