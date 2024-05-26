@@ -1,6 +1,7 @@
 import sqlite3
+#Shift_JIS(ANSI) 
 
-def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
+def create_file(conn:sqlite3.Connection=None, file_name:str='', new_name:str='')->None:
     cur = conn.cursor()
     
     cur.execute(
@@ -13,8 +14,8 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
         )
         
     try:
-        file_path = __file__.replace('code/ex01.py', 'input_files/'+file_name+'.txt')
-        with open(file_path, mode='r', encoding='UTF-8') as file:
+        file_path = __file__.replace('code/File.py', 'AA_dataset/'+file_name+'.txt')
+        with open(file_path, mode='r', encoding='Shift_JIS') as file:
             content = file.read()
     except FileNotFoundError:
         print(f"ファイル '{file_path}' が見つかりませんでした。")
@@ -30,7 +31,7 @@ def create_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     return
 
 
-def retrieve_file(conn:sqlite3.Connection=None, file_name:str='Q1')->dict:
+def retrieve_file(conn:sqlite3.Connection=None, file_name:str='')->dict:
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name])
@@ -45,7 +46,7 @@ def retrieve_file(conn:sqlite3.Connection=None, file_name:str='Q1')->dict:
         return None
 
 
-def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str='Q1')->None:
+def update_file(conn:sqlite3.Connection=None, file_name:str='', new_name:str='')->None:
     cur = conn.cursor()
     cur.execute(
       "UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", [new_name, file_name, file_name]
@@ -54,7 +55,7 @@ def update_file(conn:sqlite3.Connection=None, file_name:str='text', new_name:str
     cur.close()
     return
   
-def delete_file(conn:sqlite3.Connection=None, file_name:str='text')->None:
+def delete_file(conn:sqlite3.Connection=None, file_name:str='')->None:
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
@@ -115,21 +116,31 @@ def search_word(conn:sqlite3.Connection=None, word:str='', files:list=[], type:s
             result.append(left_right_n_word(sentence, index, extraction_range))
     
     cur.close()
+
     return result
 
+def database_init(conn:sqlite3.Connection=None):
+    cur = conn.cursor()
+    cur.execute(
+            "DELETE FROM files"
+        )
+    conn.commit()
+    cur.close()
+
 def main():
-    database_path = __file__.replace('code/File.py', 'dataset/text_datas.db')
+    database_path = __file__.replace('code/File.py', 'DataBase/text_datas.db')
     
     conn = sqlite3.connect(database_path)
     
     #create_file()テスト用
-    #create_file(conn, 'Author_1', 'K1')
+    #create_file(conn, 'AnwarKhoirul_20', 'K1')
+    #create_file(conn, 'WirelessComm_unknown', 'Q1')
     #update_file()テスト用
     #update_file(conn, 'K1', 'Q1')
     #delete_file()テスト用
     #delete_file(conn, 'Q1')
     #search_word()テスト用
-    #print(search_word(conn, ['K1'], 'give'))
+    #print(search_word(conn, 'given', ['K1']))
     
     conn.close()
     return

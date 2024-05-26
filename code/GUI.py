@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from tkinter import *
 from tkinter import ttk
 import sqlite3
 import File
 
-database_path = __file__.replace('code/GUI.py', 'dataset/text_datas.db')
+database_path = __file__.replace('code/GUI.py', 'DataBase/text_datas.db')
 conn = sqlite3.connect(database_path)
 
 text2s = []
