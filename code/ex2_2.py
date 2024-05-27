@@ -6,16 +6,29 @@ def aaa(Ktextlist):
     for i in Ktextlist:
         a = File.format(i).split()
         for j in a:
+            x=0
             for k in range(listnom):
-                if wordlist[k] == a and k<pre:
+                if wordlist[k] == j and k<pre:
                     item[k]+=1
-            wordlist.append(j)
-            item.append(1)
-            listnom+=1
+                    x=1
+            if x == 0:
+                wordlist.append(j)
+                item.append(1)
+                listnom+=1
         pre=listnom
+    print("all")
     for i in range(listnom):
-        print("all")
         if item[i] == len(Ktextlist):
+            print(wordlist[i])
+            
+    print("all-1")
+    for i in range(listnom):
+        if item[i] == len(Ktextlist)-1:
+            print(wordlist[i])
+            
+    print("all-2")
+    for i in range(listnom):
+        if item[i] == len(Ktextlist)-2:
             print(wordlist[i])
     
     return
