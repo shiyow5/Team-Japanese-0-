@@ -87,7 +87,7 @@ def format(sentence:str="")->str:
             
     return sentence
 
-def left_right_n_word(sentence:str="", index:int=0, n:int=0)->tuple:
+def left_right_n_word(sentence:list=[], index:int=0, n:int=0)->tuple:
     left_n = ' '.join(sentence[index-n:index])
     right_n = ' '.join(sentence[index+1:index+n+1])
     
