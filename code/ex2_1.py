@@ -1,8 +1,8 @@
 import sqlite3
-import File
+import NLP
 
 def frequency(text:str = 'text', top_n:int = 0)->list:
-    text = File.format(text).split()
+    text = NLP.format(text).split()
     word_dict = {}
 
     for s in text:
@@ -60,7 +60,7 @@ def similary(conn:sqlite3.Connection=None, Q_file:str='', K_files:list=[], Recur
         if ((high_score - sim_data[1]) <= 0.05):#類似度の高い上位のファイル同士のスコアの差が5%以下なら残す
             next_K_files.append(sim_data[0])
             
-    if (len(next_K_files) >= 2 and len(File.format(Q_text).split()) >= Recursive_arg):
+    if (len(next_K_files) >= 2 and len(NLP.format(Q_text).split()) >= Recursive_arg):
         return similary(conn, Q_file, next_K_files, Recursive_arg+20)
     
     highSim_K_file = sim_list[0]

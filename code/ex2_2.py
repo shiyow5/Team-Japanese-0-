@@ -1,11 +1,11 @@
-import File
+import NLP
 
 def common_word(sentences:list=[], exclude:int=0):
     
     word_identify = {}
     
     for sentence in sentences:
-        words = File.format(sentence).split()
+        words = NLP.format(sentence).split()
         
         for word in words:
             if (word not in word_identify.keys()):
