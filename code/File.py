@@ -103,14 +103,12 @@ def get_sentence(file_name:str='')->str:
 
 def main():
     #create_file()テスト用
-    #create_file(conn, 'AnwarKhoirul_20', 'K1')
-    #create_file(conn, 'WirelessComm_unknown', 'Q1')
+    #create_file('AnwarKhoirul_20', 'K1')
+    #create_file('WirelessComm_unknown', 'Q1')
     #update_file()テスト用
-    #update_file(conn, 'K1', 'Q1')
+    #update_file('K1', 'Q1')
     #delete_file()テスト用
-    #delete_file(conn, 'Q1')
-    #search_word()テスト用
-    #print(search_word(conn, 'given', ['K1']))
+    #delete_file('Q1')
 
     return
 

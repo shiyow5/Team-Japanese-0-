@@ -1,62 +1,92 @@
 #!/usr/bin/env python3
 
-from tkinter import *
-from tkinter import ttk
-import sqlite3
+import tkinter as tk
 import File
+import NLP
 
-database_path = __file__.replace('code/GUI.py', 'DataBase/text_datas.db')
-conn = sqlite3.connect(database_path)
-
-text2s = []
-label2s = []
-text3s = []
-label3s = []
-text4s = []
-label4s = []
-
-def search():
-    word = text_1.get()
-    results = File.search_word(conn, word, ['K1'])
-    
-    global text2s, label2s, text3s, label3s, text4s, label4s
-    text2s = []
-    label2s = []
-    text3s = []
-    label3s = []
-    text4s = []
-    label4s = []
-    
-    for i in range(len(results)):
-        text2s.append(StringVar())
-        label2s.append(ttk.Label(root, textvariable=text2s[i], font=('Times New Roman',20), foreground = '#1155ee', padding = (10,10)))
-        text3s.append(StringVar())
-        label3s.append(ttk.Label(root, textvariable=text3s[i], font=('Times New Roman',20), padding = (10,10)))
-        text4s.append(StringVar())
-        label4s.append(ttk.Label(root, textvariable=text4s[i], font=('Times New Roman',20), padding = (10,10)))
+class Application(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
         
-        text2s[i].set(word)
-        text3s[i].set(results[i][0])
-        text4s[i].set(results[i][1])
+        self.display_num = 10
         
-    for i in range(len(label3s)):
-        label2s[i].grid(row=i+1, column=1)
-        label3s[i].grid(row=i+1, column=0)
-        label4s[i].grid(row=i+1, column=2)
+        master.geometry("1140x600")
+        master.title("Authorchip Analysis")
+        
+        self.label_1 = tk.Label(master, text="search word: ", font = ('Times New Roman',20))
+        self.label_1.place(x=20, y=30)
+        
+        self.word = tk.StringVar()
+        self.search = tk.Entry(master, textvariable=self.word, font = ('Times New Roman',20), width = 33)
+        self.search.place(x=200, y=30)
+        
+        self.botton_1 = tk.Button(master, text = 'OK', width = 10)
+        self.botton_1.place(x=680, y=32)
+        
+        self.results_c = [tk.Label(master, font=('Times New Roman',20), foreground = '#1155ee', width=10, anchor="center") for i in range(self.display_num)] # relief=tk.SOLID
+        for i, result_c in enumerate(self.results_c):
+            result_c.place(x=500, y=100+i*40, anchor="center")
+            
+        self.results_l = [tk.Label(master, font=('Times New Roman',20), width=30, anchor="e") for i in range(self.display_num)]
+        for i, result_l in enumerate(self.results_l):
+            result_l.place(x=400, y=100+i*40, anchor="e")
+            
+        self.results_r = [tk.Label(master, font=('Times New Roman',20), width=30, anchor="w") for i in range(self.display_num)]
+        for i, result_r in enumerate(self.results_r):
+            result_r.place(x=600, y=100+i*40, anchor="w")
+        
+        
+        self.pack(anchor="center")
+        
+        
+    def set_LR_sentences(self, LR_sentences:list=None):
+        self.LR_sentences = LR_sentences[:10]
+        
+        return
+        
+    def set_result(self):
+        for i, LR_sentence in enumerate(self.LR_sentences):
+            self.results_c[i]["text"] = self.word.get()
+            self.results_l[i]["text"] = LR_sentence[0]
+            self.results_r[i]["text"] = LR_sentence[1]
+        
+        return
+        
+    def clear(self):
+        for results in [self.results_c, self.results_l, self.results_r]:
+            for result in results:
+                result["text"] = ""
+                
+        return
 
-root = Tk()
-root.title("Search window")
-
-#root.geometry("640x480")
-
-label_1 = ttk.Label(root, text="search word: ", font = ('Times New Roman',20), padding = (10,10))
-text_1 = StringVar()
-entry_1 = ttk.Entry(root,textvariable=text_1, font = ('Times New Roman',20))
-
-button_1 = ttk.Button(root,text = 'OK', command=lambda:search())
-
-label_1.grid(row=0,column=0)
-entry_1.grid(row=0,column=1)
-button_1.grid(row=0,column=2)
     
-root.mainloop()
+def main():
+    # View
+    win = tk.Tk()
+    app = Application(master = win)
+    
+    # Controller
+    def search():
+        global LR_sentences, cursol
+        cursol = 0
+        LR_sentences = NLP.search_word(app.word.get(), ['K1'])
+        app.clear()
+        app.set_LR_sentences(LR_sentences[cursol:cursol+10])
+        app.set_result()
+        cursol += 10
+        return
+    
+    def next_result():#nextボタン実装する
+        app.clear()
+        app.set_LR_sentences(LR_sentences[cursol:cursol+10])
+        app.set_result()
+        cursol += 10
+        return
+        
+    
+    app.botton_1["command"] = search
+    
+    app.mainloop()
+    
+if __name__ == "__main__":
+    main()

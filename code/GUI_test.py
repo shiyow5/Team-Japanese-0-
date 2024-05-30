@@ -1,31 +1,62 @@
-import tkinter as tk
+#!/usr/bin/env python3
 
-class Application(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.pack()
-        
-        self.master.geometry("1140x600")
-        self.master.title("Authorchip Analysis")
-        self.widget()
-        
-    def widget(self):
-        self.label_1 = tk.Label(self.master, text="search word: ", font = ('Times New Roman',20))
-        self.label_1.place(x=20, y=30)
-        
-        self.entry_1 = tk.Entry(self.master, font = ('Times New Roman',20), width = 33)
-        self.entry_1.place(x=200, y=30)
-        
-        self.botton_1 = tk.Button(self.master, text = 'OK', command=lambda:self.search(), width = 10)
-        self.botton_1.place(x=680, y=32)
-        
-    def search(self):
-        return
+from tkinter import *
+from tkinter import ttk
+import sqlite3
+import File
+
+database_path = __file__.replace('code/GUI.py', 'DataBase/text_datas.db')
+conn = sqlite3.connect(database_path)
+
+text2s = []
+label2s = []
+text3s = []
+label3s = []
+text4s = []
+label4s = []
+
+def search():
+    word = text_1.get()
+    results = File.search_word(conn, word, ['K1'])
     
-def main():
-    win = tk.Tk()
-    app = Application(master = win)
-    app.mainloop()
+    global text2s, label2s, text3s, label3s, text4s, label4s
+    text2s = []
+    label2s = []
+    text3s = []
+    label3s = []
+    text4s = []
+    label4s = []
     
-if __name__ == "__main__":
-    main()
+    for i in range(len(results)):
+        text2s.append(StringVar())
+        label2s.append(ttk.Label(root, textvariable=text2s[i], font=('Times New Roman',20), foreground = '#1155ee', padding = (10,10)))
+        text3s.append(StringVar())
+        label3s.append(ttk.Label(root, textvariable=text3s[i], font=('Times New Roman',20), padding = (10,10)))
+        text4s.append(StringVar())
+        label4s.append(ttk.Label(root, textvariable=text4s[i], font=('Times New Roman',20), padding = (10,10)))
+        
+        text2s[i].set(word)
+        text3s[i].set(results[i][0])
+        text4s[i].set(results[i][1])
+        
+    for i in range(len(label3s)):
+        label2s[i].grid(row=i+1, column=1)
+        label3s[i].grid(row=i+1, column=0)
+        label4s[i].grid(row=i+1, column=2)
+
+root = Tk()
+root.title("Search window")
+
+#root.geometry("640x480")
+
+label_1 = ttk.Label(root, text="search word: ", font = ('Times New Roman',20), padding = (10,10))
+text_1 = StringVar()
+entry_1 = ttk.Entry(root,textvariable=text_1, font = ('Times New Roman',20))
+
+button_1 = ttk.Button(root,text = 'OK', command=lambda:search())
+
+label_1.grid(row=0,column=0)
+entry_1.grid(row=0,column=1)
+button_1.grid(row=0,column=2)
+    
+root.mainloop()
