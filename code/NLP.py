@@ -24,13 +24,21 @@ def format(sentence:str="")->str:
     return sentence
 
 def left_right_n_word(sentence:list=[], index:int=0, n:int=0)->tuple:
+    '''
+    Cut n-tokens from left and right
+    '''
+    
     left_n = ' '.join(sentence[index-n:index])
     right_n = ' '.join(sentence[index+1:index+n+1])
     
     return (left_n, right_n)
 
 def search_word(word:str='', files:list=[], type:str='word-token')->list:
-    extraction_range = 5
+    '''
+    Search for a word and get sentences around that word
+    '''
+    
+    extraction_range = 10
 
     sentences = []
     for file in files:
@@ -46,3 +54,14 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
             result.append(left_right_n_word(sentence, index, extraction_range))
 
     return result
+
+
+def main():
+    #search_word()テスト用
+    print(search_word('given', ['K1']))
+    
+    return
+
+
+if (__name__ == "__main__"):
+    main()
