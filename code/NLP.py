@@ -48,7 +48,11 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
     
     for sentence in sentences:
         sentence = format(sentence[0]).split()
-        indexs = [i for i in range(len(sentence)) if sentence[i]==word]
+        
+        if (type == 'word-token'):
+            indexs = [i for i in range(len(sentence)) if sentence[i]==word]
+        else:
+            indexs = []
         
         for index in indexs:
             result.append(left_right_n_word(sentence, index, extraction_range))
