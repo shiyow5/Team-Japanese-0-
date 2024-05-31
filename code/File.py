@@ -1,17 +1,18 @@
+import datetime
 import sqlite3
 #Shift_JIS(ANSI) 
 
-database_path = __file__.replace('code/File.py', 'DataBase/text_datas.db')
+data_path = __file__.replace('code/File.py', 'DataBase/Authorship_Anarysis.db')
 
 def create_file(file_name:str='', new_name:str='')->None:
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     
     cur.execute(
-        "SELECT * FROM sqlite_master WHERE type='table'"
+        "SELECT name FROM sqlite_master WHERE type='table'"
     )
     
-    if (not(cur.fetchall())):
+    if (tuple(['files']) not in cur.fetchall()):
         cur.execute(
             "CREATE TABLE files (Original_Name text, New_Name text, Sentence text)"
         )
@@ -36,7 +37,7 @@ def create_file(file_name:str='', new_name:str='')->None:
 
 
 def retrieve_file(file_name:str='')->dict:
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name])
@@ -53,7 +54,7 @@ def retrieve_file(file_name:str='')->dict:
 
 
 def update_file(file_name:str='', new_name:str='')->None:
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
       "UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", [new_name, file_name, file_name]
@@ -65,7 +66,7 @@ def update_file(file_name:str='', new_name:str='')->None:
   
   
 def delete_file(file_name:str='')->None:
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
@@ -77,7 +78,7 @@ def delete_file(file_name:str='')->None:
 
 
 def database_init():
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
             "DELETE FROM files"
@@ -89,7 +90,7 @@ def database_init():
   
     
 def get_sentence(file_name:str='')->str:
-    conn = sqlite3.connect(database_path)
+    conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
         "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
@@ -101,6 +102,63 @@ def get_sentence(file_name:str='')->str:
     return sentence
 
 
+def add_history(word:str)->None:
+    conn = sqlite3.connect(data_path)
+    cur = conn.cursor()
+    
+    cur.execute(
+        "SELECT name FROM sqlite_master WHERE type='table'"
+    )
+    
+    if (tuple(['history']) not in cur.fetchall()):
+        cur.execute(
+            "CREATE TABLE history (Number text, Date text, Time text, Word text)"
+        )
+    
+    cur.execute(
+        "SELECT COUNT(Number) FROM history"
+    )
+    
+    dt_now = datetime.datetime.now()
+    number = f"{int(cur.fetchone()[0])+1:03}"
+    date = dt_now.strftime("%Y%m%d")
+    time = dt_now.strftime("%H%M")
+    
+    cur.execute(
+        "INSERT INTO history VALUES (?, ?, ?, ?)", [number, date, time, word]
+    )
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    return
+
+
+def get_history():
+    conn = sqlite3.connect(data_path)
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM history")
+    
+    file_data = cur.fetchall()
+    cur.close()
+    conn.close()
+    
+    return file_data
+
+
+def history_init():
+    conn = sqlite3.connect(data_path)
+    cur = conn.cursor()
+    cur.execute(
+            "DELETE FROM history"
+        )
+    conn.commit()
+    cur.close()
+    conn.close()
+    return
+
+
 def main():
     #create_file()テスト用
     #create_file('AnwarKhoirul_20', 'K1')
@@ -109,6 +167,9 @@ def main():
     #update_file('K1', 'Q1')
     #delete_file()テスト用
     #delete_file('Q1')
+    
+    #add_history("test")
+    print(get_history())
 
     return
 

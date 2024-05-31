@@ -56,6 +56,8 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
         
         for index in indexs:
             result.append(left_right_n_word(sentence, index, extraction_range))
+            
+    File.add_history(word=word)
 
     return result
 
