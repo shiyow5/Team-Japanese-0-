@@ -45,7 +45,7 @@ def retrieve_file(file_name:str='')->dict:
 
     cur.execute("SELECT * FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name])
     
-    file_data = cur.fetchall()
+    file_data = cur.fetchone()
     cur.close()
     conn.close()
     

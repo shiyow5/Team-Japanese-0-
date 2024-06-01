@@ -22,6 +22,9 @@ class Main_Win(tk.Frame):
         self.newWindow1 = tk.Toplevel(self.master)
         self.subapp_1 = File_Win(self.newWindow1)
         self.subapp_1.button_1["command"] = self.subapp_1_functions[0]
+        self.subapp_1.button_2["command"] = self.subapp_1_functions[1]
+        self.subapp_1.button_3["command"] = self.subapp_1_functions[2]
+        self.subapp_1.button_4["command"] = self.subapp_1_functions[3]
         
     def search_window(self):
         self.newWindow2 = tk.Toplevel(self.master)
@@ -58,29 +61,70 @@ class File_Win(tk.Frame):
         self.label_2.place(x=350, y=30)
         
         self.new_name = tk.StringVar()
-        self.entry_new = tk.Entry(master, textvariable=self.file_name, font = ('Times New Roman',15), width = 10)
+        self.entry_new = tk.Entry(master, textvariable=self.new_name, font = ('Times New Roman',15), width = 10)
         self.entry_new.place(x=450, y=30)
         
         self.button_1 = tk.Button(master, text='Upload', width=10)
         self.button_1.place(x=50, y=100)
+        self.upload_error = tk.Label(master, font=('Times New Roman',15), foreground = '#999999')
+        self.upload_error.place(x=200, y=100)
         
         self.button_2 = tk.Button(master, text='Search', width=10)
         self.button_2.place(x=50, y=200)
+        self.search_error = tk.Label(master, font=('Times New Roman',15), foreground = '#999999')
+        self.search_error.place(x=200, y=200)
+        self.search_result = tk.Label(master, font=('Times New Roman',15), foreground = '#999999', justify="left")
+        self.search_result.place(x=70, y=235)
         
         self.button_3 = tk.Button(master, text='Update', width=10)
         self.button_3.place(x=50, y=300)
+        self.update_error = tk.Label(master, font=('Times New Roman',15), foreground = '#999999')
+        self.update_error.place(x=200, y=300)
         
         self.button_4 = tk.Button(master, text='Delete', width=10)
         self.button_4.place(x=50, y=400)
+        self.delete_error = tk.Label(master, font=('Times New Roman',15), foreground = '#999999')
+        self.delete_error.place(x=200, y=400)
         
         self.label_3 = tk.Label(master, text="file status", font = ('Times New Roman',15), foreground = '#999999')
         self.label_3.place(x=20, y=500)
         self.label_4 = tk.Label(master, font = ('Times New Roman',17), foreground = '#999999')
         self.label_4.place(x=40, y=530)
         
+        self.set_file_status(File.get_fileName())
+        
+        
+    def set_upload_error(self, status:bool):
+        if (status):
+            self.upload_error["text"] = "Success."
+        else:
+            self.upload_error["text"] = "No such text-file."
+            
+    def set_search_error(self, result):
+        if (result):
+            self.search_error["text"] = "Success."
+            result = list(result)
+            result[2] = '\n' + result[2][:50].replace('\n', ' ') + '...'
+            self.search_result["text"] = ', '.join(result)
+        else:
+            self.search_error["text"] = "No such file."
+            self.search_result["text"] = ""
+            
+    def set_update_error(self):
+        self.update_error["text"] = "Tried to update"
+        
+    def set_delete_error(self):
+        self.delete_error["text"] = "Tried to delete" 
         
     def set_file_status(self, files:list):
         self.label_4["text"] = ', '.join(files)
+        
+    def clear(self):
+        self.upload_error["text"] = ""
+        self.search_error["text"] = ""
+        self.search_result["text"] = ""
+        self.update_error["text"] = ""
+        self.delete_error["text"] = ""
 
 
 class Search_Win(tk.Frame):
@@ -211,19 +255,33 @@ def main():
     
     # Controller(File Controll)
     def upload_file():
+        app.subapp_1.clear()
+        status = File.create_file(file_name=app.subapp_1.file_name.get(), new_name=app.subapp_1.new_name.get())
+        app.subapp_1.set_upload_error(status=status)
         app.subapp_1.set_file_status(File.get_fileName())
         return
     
     def search_file():
+        app.subapp_1.clear()
+        result = File.retrieve_file(file_name=app.subapp_1.file_name.get())
+        app.subapp_1.set_search_error(result=result)
         return
     
     def update_file():
+        app.subapp_1.clear()
+        File.update_file(file_name=app.subapp_1.file_name.get(), new_name=app.subapp_1.new_name.get())
+        app.subapp_1.set_update_error()
+        app.subapp_1.set_file_status(File.get_fileName())
         return
     
     def delete_file():
+        app.subapp_1.clear()
+        File.delete_file(file_name=app.subapp_1.file_name.get())
+        app.subapp_1.set_delete_error()
+        app.subapp_1.set_file_status(File.get_fileName())
         return
     
-    app.set_winController(winName='file_window', functions=[upload_file])
+    app.set_winController(winName='file_window', functions=[upload_file, search_file, update_file, delete_file])
     
     # Controller(Search Window)
     def select_file():
