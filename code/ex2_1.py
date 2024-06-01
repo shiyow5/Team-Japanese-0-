@@ -47,7 +47,7 @@ def similary(Q_file:str='', K_files:list=[], Recursive_arg:int=20)->str:
     for sim_data in sim_list:
         if (sim_data == sim_list[0]):
             high_score = sim_data[1]
-        if ((high_score - sim_data[1]) <= 0.05):#類似度の高い上位のファイル同士のスコアの差が5%以下なら残す
+        if ((high_score - sim_data[1]) <= 0.051):#類似度の高い上位のファイル同士のスコアの差が5%以下なら残す
             next_K_files.append(sim_data[0])
             
     if (len(next_K_files) >= 2 and len(NLP.format(Q_text).split()) >= Recursive_arg):
@@ -66,6 +66,7 @@ if __name__ == "__main__":
     highSim_K_file = similary('WirelessComm_unknown', K_files)
     print('~finish')
     print(f"The most similar file is: {highSim_K_file}")
+
     '''
     text1 = "I'm a 'perfect human'.\ntanaka tanaka tanaka!!"
     text2 = "tanaka is very pop human. But, he like kill."

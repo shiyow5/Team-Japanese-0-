@@ -11,7 +11,13 @@ def format(sentence:str="")->str:
         if (i == len(sentence)):
             break
         
-        if ((not sentence[i].isalpha()) and (sentence[i] != ' ')):
+        if (sentence[i].isnumeric()): # 数字の処理
+            if ((not sentence[i-1].isnumeric()) and sentence[i-1] != ' '):
+                sentence = sentence[:i] + ' ' + sentence[i:]
+            elif ((not sentence[i+1].isnumeric()) and sentence[i+1] != ' '):
+                sentence = sentence[:i+1] + ' ' + sentence[i+1:]
+        
+        elif ((not sentence[i].isalpha()) and (sentence[i] != ' ')): # アルファベット以外の処理(数字を除く)         
             if (sentence[i-1] == ' ' and sentence[i+1] != ' '):
                 sentence = sentence[:i+1] + ' ' + sentence[i+1:]
             elif (sentence[i-1] != ' ' and sentence[i+1] == ' '):
