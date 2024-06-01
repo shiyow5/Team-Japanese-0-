@@ -49,7 +49,7 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
     for sentence in sentences:
         sentence = format(sentence[0]).split()
         
-        if (type == 'word-token'):
+        if (type == 'word-token'): # 単語ヒットのみ(連語は含まない)
             indexs = [i for i in range(len(sentence)) if sentence[i]==word]
         else:
             indexs = []

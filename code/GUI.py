@@ -19,20 +19,68 @@ class Main_Win(tk.Frame):
         self.button_search.place(x=285, y=70, anchor="center")
         
     def file_window(self):
-        return
+        self.newWindow1 = tk.Toplevel(self.master)
+        self.subapp_1 = File_Win(self.newWindow1)
+        self.subapp_1.button_1["command"] = self.subapp_1_functions[0]
         
     def search_window(self):
-        self.newWindow = tk.Toplevel(self.master)
-        self.subapp_1 = Search_Win(self.newWindow)
-        self.subapp_1.button_1["command"] = self.subapp_1_functions[0]
-        self.subapp_1.button_2["command"] = self.subapp_1_functions[1]
-        self.subapp_1.button_3["command"] = self.subapp_1_functions[2]
-        self.subapp_1.button_4["command"] = self.subapp_1_functions[3]
-        self.subapp_1.button_5["command"] = self.subapp_1_functions[4]
+        self.newWindow2 = tk.Toplevel(self.master)
+        self.subapp_2 = Search_Win(self.newWindow2)
+        self.subapp_2.button_1["command"] = self.subapp_2_functions[0]
+        self.subapp_2.button_2["command"] = self.subapp_2_functions[1]
+        self.subapp_2.button_3["command"] = self.subapp_2_functions[2]
+        self.subapp_2.button_4["command"] = self.subapp_2_functions[3]
+        self.subapp_2.button_5["command"] = self.subapp_2_functions[4]
         
     def set_winController(self, winName:str, functions:list):
-        if (winName == 'search_window'):
+        if (winName == 'file_window'):
             self.subapp_1_functions = functions
+        elif (winName == 'search_window'):
+            self.subapp_2_functions = functions
+            
+            
+class File_Win(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.pack(anchor="center")
+        
+        master.geometry("600x600")
+        master.title("File Controll")
+        
+        self.label_1 = tk.Label(master, text='file name: ', font = ('Times New Roman',15))
+        self.label_1.place(x=20, y=30)
+        
+        self.file_name = tk.StringVar()
+        self.entry_file = tk.Entry(master, textvariable=self.file_name, font = ('Times New Roman',15), width = 20)
+        self.entry_file.place(x=120, y=30)
+        
+        self.label_2 = tk.Label(master, text='new name: ', font = ('Times New Roman',15))
+        self.label_2.place(x=350, y=30)
+        
+        self.new_name = tk.StringVar()
+        self.entry_new = tk.Entry(master, textvariable=self.file_name, font = ('Times New Roman',15), width = 10)
+        self.entry_new.place(x=450, y=30)
+        
+        self.button_1 = tk.Button(master, text='Upload', width=10)
+        self.button_1.place(x=50, y=100)
+        
+        self.button_2 = tk.Button(master, text='Search', width=10)
+        self.button_2.place(x=50, y=200)
+        
+        self.button_3 = tk.Button(master, text='Update', width=10)
+        self.button_3.place(x=50, y=300)
+        
+        self.button_4 = tk.Button(master, text='Delete', width=10)
+        self.button_4.place(x=50, y=400)
+        
+        self.label_3 = tk.Label(master, text="file status", font = ('Times New Roman',15), foreground = '#999999')
+        self.label_3.place(x=20, y=500)
+        self.label_4 = tk.Label(master, font = ('Times New Roman',17), foreground = '#999999')
+        self.label_4.place(x=40, y=530)
+        
+        
+    def set_file_status(self, files:list):
+        self.label_4["text"] = ', '.join(files)
 
 
 class Search_Win(tk.Frame):
@@ -161,54 +209,71 @@ def main():
     win = tk.Tk()
     app = Main_Win(master = win)
     
-    # Controller
+    # Controller(File Controll)
+    def upload_file():
+        app.subapp_1.set_file_status(File.get_fileName())
+        return
+    
+    def search_file():
+        return
+    
+    def update_file():
+        return
+    
+    def delete_file():
+        return
+    
+    app.set_winController(winName='file_window', functions=[upload_file])
+    
+    # Controller(Search Window)
     def select_file():
-        app.subapp_1.clear()
-        file_name = app.subapp_1.file_name.get()
-        if (File.retrieve_file(file_name) and file_name not in app.subapp_1.files):
-            app.subapp_1.set_file(file=file_name)
-            app.subapp_1.set_file_error(status=True)
+        app.subapp_2.clear()
+        file_name = app.subapp_2.file_name.get()
+        if (File.retrieve_file(file_name) and file_name not in app.subapp_2.files):
+            app.subapp_2.set_file(file=file_name)
+            app.subapp_2.set_file_error(status=True)
         else:
-            app.subapp_1.set_file_error(status=False)
+            app.subapp_2.set_file_error(status=False)
         
         return
     
     def select_search_type():
-        app.subapp_1.clear()
-        search_type = app.subapp_1.search_type.get()
+        app.subapp_2.clear()
+        search_type = app.subapp_2.search_type.get()
         if (search_type == "word-token"):
-            app.subapp_1.set_type_error(status=True)
+            app.subapp_2.set_type_error(status=True)
         else:
-            app.subapp_1.set_type_error(status=False)
+            app.subapp_2.set_type_error(status=False)
             
         return
     
-    def search():
-        LR_sentences = NLP.search_word(word=app.subapp_1.word.get(), files=app.subapp_1.files, type=app.subapp_1.search_type.get())
-        app.subapp_1.clear()
-        app.subapp_1.reset_cursol()
-        app.subapp_1.set_LR_sentences(LR_sentences)
-        app.subapp_1.set_result()
+    def search_word():
+        LR_sentences = NLP.search_word(word=app.subapp_2.word.get(), files=app.subapp_2.files, type=app.subapp_2.search_type.get())
+        app.subapp_2.clear()
+        app.subapp_2.reset_cursol()
+        app.subapp_2.set_LR_sentences(LR_sentences)
+        app.subapp_2.set_result()
         return
     
     def next_result():
-        app.subapp_1.clear()
-        app.subapp_1.move_cursol()
-        app.subapp_1.set_result()
+        app.subapp_2.clear()
+        app.subapp_2.move_cursol()
+        app.subapp_2.set_result()
         return
     
     def clear_search():
-        app.subapp_1.file_name.set("")
-        app.subapp_1.search_type.set("")
-        app.subapp_1.word.set("")
-        app.subapp_1.clear()
-        app.subapp_1.reset_cursol()
-        app.subapp_1.reset_files()
-        app.subapp_1.file_selected["text"] = ""
-        app.subapp_1.type_selected["text"] = ""
+        app.subapp_2.file_name.set("")
+        app.subapp_2.search_type.set("")
+        app.subapp_2.word.set("")
+        app.subapp_2.clear()
+        app.subapp_2.reset_cursol()
+        app.subapp_2.reset_files()
+        app.subapp_2.file_selected["text"] = ""
+        app.subapp_2.type_selected["text"] = ""
         return
         
-    app.set_winController(winName='search_window', functions=[select_file, select_search_type, search, next_result, clear_search])
+    app.set_winController(winName='search_window', functions=[select_file, select_search_type, search_word, next_result, clear_search])
+    
     
     app.mainloop()
     

@@ -4,7 +4,7 @@ import sqlite3
 
 data_path = __file__.replace('code/File.py', 'DataBase/Authorship_Anarysis.db')
 
-def create_file(file_name:str='', new_name:str='')->None:
+def create_file(file_name:str='', new_name:str='')->bool:
     conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     
@@ -22,9 +22,11 @@ def create_file(file_name:str='', new_name:str='')->None:
         with open(file_path, mode='r', encoding='Shift_JIS') as file:
             content = file.read()
     except FileNotFoundError:
-        print(f"ファイル '{file_path}' が見つかりませんでした。")
+        print(f"Not found file: '{file_path}'")
+        return False
     except Exception as e:
-        print(f"エラーが発生しました: {e}")
+        print(f"Error: {e}")
+        return False
     
     cur.execute(
         "INSERT INTO files VALUES (?, ?, ?)", [file_name, new_name, content]
@@ -33,7 +35,8 @@ def create_file(file_name:str='', new_name:str='')->None:
     conn.commit()
     cur.close()
     conn.close()
-    return
+    
+    return True
 
 
 def retrieve_file(file_name:str='')->dict:
@@ -49,11 +52,11 @@ def retrieve_file(file_name:str='')->dict:
     if file_data:
         return file_data
     else:
-        print(f"ファイル '{file_name}' が見つかりませんでした。")
+        print(f"Not found file: '{file_name}'")
         return None
 
 
-def update_file(file_name:str='', new_name:str='')->None:
+def update_file(file_name:str='', new_name:str='')->None: # 成功,失敗がわからない
     conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
@@ -65,7 +68,7 @@ def update_file(file_name:str='', new_name:str='')->None:
     return
   
   
-def delete_file(file_name:str='')->None:
+def delete_file(file_name:str='')->None: # 成功,失敗がわからない
     conn = sqlite3.connect(data_path)
     cur = conn.cursor()
     cur.execute(
@@ -75,6 +78,35 @@ def delete_file(file_name:str='')->None:
     cur.close()
     conn.close()
     return
+
+
+def get_fileName():
+    conn = sqlite3.connect(data_path)
+    cur = conn.cursor()
+
+    cur.execute("SELECT New_Name FROM files")
+    
+    file_names = cur.fetchall()
+    cur.close()
+    conn.close()
+    
+    for i, file_name in enumerate(file_names):
+        file_names[i] = file_name[0]
+    
+    return file_names
+
+
+def get_sentence(file_name:str='')->str:
+    conn = sqlite3.connect(data_path)
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
+    )
+    sentence = cur.fetchone()
+    cur.close()
+    conn.close()
+    
+    return sentence
 
 
 def database_init():
@@ -87,19 +119,6 @@ def database_init():
     cur.close()
     conn.close()
     return
-  
-    
-def get_sentence(file_name:str='')->str:
-    conn = sqlite3.connect(data_path)
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
-    )
-    sentence = cur.fetchone()
-    cur.close()
-    conn.close()
-    
-    return sentence
 
 
 def add_history(word:str)->None:
@@ -140,11 +159,11 @@ def get_history():
 
     cur.execute("SELECT * FROM history")
     
-    file_data = cur.fetchall()
+    history_datas = cur.fetchall()
     cur.close()
     conn.close()
     
-    return file_data
+    return history_datas
 
 
 def history_init():
@@ -169,6 +188,8 @@ def main():
     #delete_file('Q1')
     
     #add_history("test")
+    
+    print(get_fileName())
     print(get_history())
 
     return
