@@ -1,4 +1,4 @@
-import sqlite3
+import File
 import NLP
 
 def frequency(text:str = 'text', top_n:int = 0)->list:
@@ -28,27 +28,17 @@ def compare(list1,list2):
 
     return y
 
-def similary(conn:sqlite3.Connection=None, Q_file:str='', K_files:list=[], Recursive_arg:int=20)->str:
+def similary(Q_file:str='', K_files:list=[], Recursive_arg:int=20)->str:
     
-    cur = conn.cursor()
-    
-    cur.execute(
-        "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [Q_file, Q_file]
-    )
-    Q_text = cur.fetchone()[0]
+    Q_text = File.get_sentence(Q_file)
     
     sim_list = []
     
     for K_file in K_files:
-        cur.execute(
-            "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [K_file, K_file]
-        )
-        K_text = cur.fetchone()[0]
+        K_text = File.get_sentence(K_file)
         
         score = compare(frequency(Q_text, Recursive_arg), frequency(K_text, Recursive_arg))
         sim_list.append((K_file, score))
-        
-    cur.close()
         
     sim_list = sorted(sim_list, key = lambda x:x[1], reverse=True)
     print(f'top{Recursive_arg}:\n{sim_list}')
@@ -61,7 +51,7 @@ def similary(conn:sqlite3.Connection=None, Q_file:str='', K_files:list=[], Recur
             next_K_files.append(sim_data[0])
             
     if (len(next_K_files) >= 2 and len(NLP.format(Q_text).split()) >= Recursive_arg):
-        return similary(conn, Q_file, next_K_files, Recursive_arg+20)
+        return similary(Q_file, next_K_files, Recursive_arg+20)
     
     highSim_K_file = sim_list[0]
     
@@ -69,13 +59,11 @@ def similary(conn:sqlite3.Connection=None, Q_file:str='', K_files:list=[], Recur
 
 
 if __name__ == "__main__":
-    database_path = __file__.replace('code/ex2_1.py', 'DataBase/text_datas.db')
-    conn = sqlite3.connect(database_path)
     
     K_files = ['AnwarKhoirul_20', 'AokiToshiaki_4', 'AsanoFumihiko_1', 'ChenJiageng_6', 'CheongKaiYuen_1', 'DangJiannwu_5', 'DefagoXavier_1', 'IkedaKokolo_2', 'InoguchiYasushi_1', 'MatsumotoTadashi_19']
     
     print('progress~')
-    highSim_K_file = similary(conn, 'WirelessComm_unknown', K_files)
+    highSim_K_file = similary('WirelessComm_unknown', K_files)
     print('~finish')
     print(f"The most similar file is: {highSim_K_file}")
     '''

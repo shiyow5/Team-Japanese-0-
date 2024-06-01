@@ -47,7 +47,7 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
     result = []
     
     for sentence in sentences:
-        sentence = format(sentence[0]).split()
+        sentence = format(sentence).split()
         
         if (type == 'word-token'): # 単語ヒットのみ(連語は含まない)
             indexs = [i for i in range(len(sentence)) if sentence[i]==word]
@@ -57,7 +57,7 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
         for index in indexs:
             result.append(left_right_n_word(sentence, index, extraction_range))
             
-    File.add_history(word=word)
+    #File.add_history(word=word)
 
     return result
 

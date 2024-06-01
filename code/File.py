@@ -106,7 +106,7 @@ def get_sentence(file_name:str='')->str:
     cur.close()
     conn.close()
     
-    return sentence
+    return sentence[0]
 
 
 def database_init():
