@@ -1,4 +1,4 @@
-import File
+from . import File
 
 def format(sentence:str="")->str:
     '''
@@ -11,7 +11,13 @@ def format(sentence:str="")->str:
         if (i == len(sentence)):
             break
         
-        if ((not sentence[i].isalpha()) and (sentence[i] != ' ')):
+        if (sentence[i].isnumeric()): # 数字の処理
+            if ((not sentence[i-1].isnumeric()) and sentence[i-1] != ' '):
+                sentence = sentence[:i] + ' ' + sentence[i:]
+            elif ((not sentence[i+1].isnumeric()) and sentence[i+1] != ' '):
+                sentence = sentence[:i+1] + ' ' + sentence[i+1:]
+        
+        elif ((not sentence[i].isalpha()) and (sentence[i] != ' ')): # アルファベット以外の処理(数字を除く)         
             if (sentence[i-1] == ' ' and sentence[i+1] != ' '):
                 sentence = sentence[:i+1] + ' ' + sentence[i+1:]
             elif (sentence[i-1] != ' ' and sentence[i+1] == ' '):
@@ -47,11 +53,17 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
     result = []
     
     for sentence in sentences:
-        sentence = format(sentence[0]).split()
-        indexs = [i for i in range(len(sentence)) if sentence[i]==word]
+        sentence = format(sentence).split()
+        
+        if (type == 'word-token'): # 単語ヒットのみ(連語は含まない)
+            indexs = [i for i in range(len(sentence)) if sentence[i]==word]
+        else:
+            indexs = []
         
         for index in indexs:
             result.append(left_right_n_word(sentence, index, extraction_range))
+            
+    #File.add_history(word=word)
 
     return result
 
