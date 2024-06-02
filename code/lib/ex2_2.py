@@ -1,3 +1,4 @@
+import pandas as pd
 import File
 import NLP
 
@@ -20,14 +21,37 @@ def common_word(sentences:list=[], exclude:int=0):
     return result
 
 
-if (__name__ == "__main__"):
+def get_wordTable(exclude:int):
+    files = File.get_fileName()
+    sentences = files.copy()
+    for i, file in enumerate(files):
+        sentences[i] = File.get_sentence(file)
+        
+    words = common_word(sentences=sentences, exclude=len(files))
     
+    df = pd.DataFrame(index=words, columns=files)
+    df.fillna("´", inplace=True)
+    
+    for i, file in enumerate(files):
+        sentence = NLP.format(sentences[i]).split()
+        for word in words:
+            if word in sentence:
+                df[file][word] = word
+            
+    
+    print(df)
+    
+
+
+if (__name__ == "__main__"):
+    get_wordTable()
+    """
     files = File.get_fileName()
     for i, file in enumerate(files):
         files[i] = File.get_sentence(file)
     
     print(common_word(files))
-
+    """
     """
     text1 = 'bb cc dd ee ff gg'
     text2 = 'bb qq ww rr dd gg'

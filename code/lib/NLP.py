@@ -1,4 +1,4 @@
-import File
+from . import File
 
 def format(sentence:str="")->str:
     '''

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-import File
-import NLP
+from .lib import File
+from .lib import NLP
 
 class Main_Win(tk.Frame):
     def __init__(self, master=None):

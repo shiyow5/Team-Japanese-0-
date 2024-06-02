@@ -2,7 +2,7 @@ import datetime
 import sqlite3
 #Shift_JIS(ANSI) 
 
-data_path = __file__.replace('code/File.py', 'DataBase/Authorship_Anarysis.db')
+data_path = __file__.replace('code/lib/File.py', 'DataBase/Authorship_Anarysis.db')
 
 def create_file(file_name:str='', new_name:str='')->bool:
     conn = sqlite3.connect(data_path)
@@ -18,7 +18,7 @@ def create_file(file_name:str='', new_name:str='')->bool:
         )
         
     try:
-        file_path = __file__.replace('code/File.py', 'AA_dataset/'+file_name+'.txt')
+        file_path = __file__.replace('code/lib/File.py', 'AA_dataset/'+file_name+'.txt')
         with open(file_path, mode='r', encoding='Shift_JIS') as file:
             content = file.read()
     except FileNotFoundError:
