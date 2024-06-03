@@ -12,10 +12,10 @@ def format(sentence:str="")->str:
         if (i == len(sentence)):
             break
         
-        if (sentence[i].isnumeric()): # 数字の処理
-            if ((not sentence[i-1].isnumeric()) and sentence[i-1] != ' '):
+        if (sentence[i].isnumeric() or (sentence[i]=='.' and sentence[i-1].isnumeric() and sentence[i+1].isnumeric())): # 数字の処理
+            if ((not sentence[i-1].isnumeric()) and sentence[i-1] != ' ' and sentence[i-1] != '.'):
                 sentence = sentence[:i] + ' ' + sentence[i:]
-            elif ((not sentence[i+1].isnumeric()) and sentence[i+1] != ' '):
+            if ((not sentence[i+1].isnumeric()) and sentence[i+1] != ' ' and sentence[i+1] != '.'):
                 sentence = sentence[:i+1] + ' ' + sentence[i+1:]
         
         elif ((not sentence[i].isalpha()) and (sentence[i] != ' ')): # アルファベット以外の処理(数字を除く)         
@@ -56,8 +56,8 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
     for sentence in sentences:
         sentence = format(sentence).split()
         
-        if (type == 'word-token'): # 単語ヒットのみ(連語は含まない)
-            indexs = [i for i in range(len(sentence)) if sentence[i]==word]
+        if (type == 'word-token'): # 単語ヒットのみ(連語は含まない)(大文字、小文字の区別なし)
+            indexs = [i for i in range(len(sentence)) if sentence[i].lower()==word.lower()]
         else:
             indexs = []
         
@@ -68,15 +68,19 @@ def search_word(word:str='', files:list=[], type:str='word-token')->list:
 
     return result
 
-def frequency(text:str = 'text', top_n:int = 0)->list:
+def frequency(text:str = 'text', top_n:int = 0, word_identify:bool = False):
     text = format(text).split()
     word_dict = {}
 
     for s in text:
+        s = s.lower() # 大文字、小文字の区別なし
         if s in word_dict:
             word_dict[s] += 1
         else:
             word_dict.setdefault(s, 1)
+            
+    if (word_identify):
+        return word_dict
 
     word_list = sorted(word_dict.items(), key = lambda x : x[1], reverse=True)
     word_list = [i for i, j in word_list]
@@ -128,18 +132,16 @@ def common_word(sentences:list=[], exclude:int=0):
     
     word_identify = {}
     
-    for i, sentence in enumerate(sentences):
-        words = format(sentence).split()
+    for sentence in sentences:
+        words = frequency(text=sentence, word_identify=True).keys()
         
         for word in words:
             if (word not in word_identify.keys()):
-                word_identify[word] = [i, 1]
+                word_identify[word] = 0
                 
-            if (word_identify[word][0] != i): # 同じファイル内の単語重複カウント禁止
-                word_identify[word][0] = i
-                word_identify[word][1] += 1
+            word_identify[word] += 1
             
-    result = [word for word in word_identify.keys() if word_identify[word][1]==(len(sentences)-exclude)]
+    result = [word for word in word_identify.keys() if word_identify[word]==(len(sentences)-exclude)]
     
     return result
 
