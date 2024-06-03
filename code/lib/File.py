@@ -2,10 +2,10 @@ import datetime
 import sqlite3
 #Shift_JIS(ANSI) 
 
-data_path = __file__.replace('code/lib/File.py', 'DataBase/Authorship_Anarysis.db')
+DATA_PATH = __file__.replace('code/lib/File.py', 'DataBase/Authorship_Anarysis.db')
 
 def create_file(file_name:str='', new_name:str='')->bool:
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     
     cur.execute(
@@ -40,7 +40,7 @@ def create_file(file_name:str='', new_name:str='')->bool:
 
 
 def retrieve_file(file_name:str='')->dict:
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name])
@@ -57,7 +57,7 @@ def retrieve_file(file_name:str='')->dict:
 
 
 def update_file(file_name:str='', new_name:str='')->None: # 成功,失敗がわからない
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
       "UPDATE files SET New_Name = ? WHERE (Original_Name = ?) OR (New_Name = ?)", [new_name, file_name, file_name]
@@ -69,7 +69,7 @@ def update_file(file_name:str='', new_name:str='')->None: # 成功,失敗がわ�
   
   
 def delete_file(file_name:str='')->None: # 成功,失敗がわからない
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
         "DELETE FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
@@ -81,7 +81,7 @@ def delete_file(file_name:str='')->None: # 成功,失敗がわからない
 
 
 def get_fileName():
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
 
     cur.execute("SELECT New_Name FROM files")
@@ -97,7 +97,7 @@ def get_fileName():
 
 
 def get_sentence(file_name:str='')->str:
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
         "SELECT Sentence FROM files WHERE (Original_Name = ?) OR (New_Name = ?)", [file_name, file_name]
@@ -110,7 +110,7 @@ def get_sentence(file_name:str='')->str:
 
 
 def database_init():
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
             "DELETE FROM files"
@@ -122,7 +122,7 @@ def database_init():
 
 
 def add_history(word:str)->None:
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     
     cur.execute(
@@ -154,7 +154,7 @@ def add_history(word:str)->None:
 
 
 def get_history():
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM history")
@@ -167,7 +167,7 @@ def get_history():
 
 
 def history_init():
-    conn = sqlite3.connect(data_path)
+    conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
             "DELETE FROM history"
