@@ -4,6 +4,7 @@
 デモンストレーション：研究棟265　13:00~  
 
 プロジェクトの実行：python3 -m code  
+テストケースの実行：python3 -m tests  
 
 ## Level-1
 データベースはsqlite3を使用する  
