@@ -109,11 +109,23 @@ def get_sentence(file_name:str='')->str:
     return sentence[0]
 
 
-def database_init():
+def file_init():
     conn = sqlite3.connect(DATA_PATH)
     cur = conn.cursor()
     cur.execute(
             "DELETE FROM files"
+        )
+    conn.commit()
+    cur.close()
+    conn.close()
+    return
+
+
+def history_init():
+    conn = sqlite3.connect(DATA_PATH)
+    cur = conn.cursor()
+    cur.execute(
+            "DELETE FROM history"
         )
     conn.commit()
     cur.close()
